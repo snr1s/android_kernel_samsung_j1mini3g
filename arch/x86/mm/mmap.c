@@ -65,7 +65,7 @@ static int mmap_is_legacy(void)
 	return sysctl_legacy_va_layout;
 }
 
-static unsigned long mmap_rnd(void)
+unsigned long arch_mmap_rnd(void)
 {
 	unsigned long rnd = 0;
 
@@ -91,7 +91,7 @@ static unsigned long mmap_base(void)
 	else if (gap > MAX_GAP)
 		gap = MAX_GAP;
 
-	return PAGE_ALIGN(TASK_SIZE - gap - mmap_rnd());
+	return PAGE_ALIGN(TASK_SIZE - gap - arch_mmap_rnd());
 }
 
 /*
@@ -103,7 +103,7 @@ static unsigned long mmap_legacy_base(void)
 	if (mmap_is_ia32())
 		return TASK_UNMAPPED_BASE;
 	else
-		return TASK_UNMAPPED_BASE + mmap_rnd();
+		return TASK_UNMAPPED_BASE + arch_mmap_rnd();
 }
 
 /*
@@ -114,6 +114,9 @@ void arch_pick_mmap_layout(struct mm_struct *mm)
 {
 	mm->mmap_legacy_base = mmap_legacy_base();
 	mm->mmap_base = mmap_base();
+
+	if (current->flags & PF_RANDOMIZE)
+		random_factor = arch_mmap_rnd();
 
 	if (mmap_is_legacy()) {
 		mm->mmap_base = mm->mmap_legacy_base;
