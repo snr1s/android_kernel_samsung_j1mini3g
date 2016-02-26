@@ -75,9 +75,9 @@ unsigned long arch_mmap_rnd(void)
 	*/
 	if (current->flags & PF_RANDOMIZE) {
 		if (mmap_is_ia32())
-			rnd = get_random_int() % (1<<8);
+			rnd = get_random_long() & ((1UL << mmap_rnd_bits) - 1);
 		else
-			rnd = get_random_int() % (1<<28);
+			rnd = get_random_long() & ((1UL << mmap_rnd_bits) - 1);
 	}
 	return rnd << PAGE_SHIFT;
 }
