@@ -63,3 +63,5 @@ obj-$(CONFIG_SPRD_AVS_DEBUG) += avs_debug.o
 obj-$(CONFIG_SPRD_AUX_DEBUG) += aux_debug.o
 
 endif
+
+obj-$(CONFIG_PSTORE) += ramoops.o
