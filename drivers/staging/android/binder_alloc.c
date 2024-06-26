@@ -28,6 +28,7 @@
 #include <linux/slab.h>
 #include <linux/sched.h>
 #include <linux/list_lru.h>
+#include <linux/err.h>
 #include "binder_alloc.h"
 #include "binder_trace.h"
 
